@@ -10,7 +10,7 @@ rsvps = db.Table('rsvps',
 	db.Column('event_id', db.Integer, db.ForeignKey('events.id'))
 	)
  
-    ### here we will use this class to defines the user data model###
+    ### defines the user data model###
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -38,28 +38,7 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def generate_auth_token(self):
-       ###a method to generate the access token###
-        try:
-            # set up a payload
-            payload={
-                    'exp': datetime.utcnow() + timedelta(minutes=60),
-                    'iat': datetime.utcnow(),
-                    'sub': self.id
-            }
-            ### here we will create the byte string token using the payload and the SECRET key###
-            jwt_string = jwt.encode(
-                    payload,
-                    current_app.config.get('SECRET_KEY'),
-                    algorithm='HS256'
-            )
-            return jwt_string
-
-        except Exception as error:
-            # return an error in string format if an exception occurs
-            return str(error)
-
-    #####  The __repr__ method simply tells Python how to print objects of a class####
+    
     def __repr__(self):
         return '<User %r>' % self.username
 
